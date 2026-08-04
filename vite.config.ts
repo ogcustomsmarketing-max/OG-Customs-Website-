@@ -6,7 +6,7 @@ import tailwindcss from "@tailwindcss/vite";
 // name, e.g.: base: '/OG-Customs-Website-/'
 // With a custom domain (e.g. ogcustoms.in) keep it as '/'.
 export default defineConfig({
-  base: "/",
+  base: "/OG-Customs-Website-/",
   plugins: [react(), tailwindcss()],
   resolve: { tsconfigPaths: true },
   build: {
