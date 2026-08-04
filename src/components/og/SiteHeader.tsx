@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Menu, X, Instagram } from "lucide-react";
-import logo from "@/assets/og-monogram.png";
+import logo from "@/assets/og-logo-mark.png";
 import { CtaButton, INSTAGRAM_URL, INSTAGRAM_HANDLE, openExternal } from "./Reveal";
 
 const links = [

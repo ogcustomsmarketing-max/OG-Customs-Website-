@@ -1,15 +1,9 @@
-import { motion, type Variants } from "motion/react";
-import type { MouseEvent, ReactNode } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
+import type { MouseEvent } from "react";
 
-const variants: Variants = {
-  hidden: { opacity: 0, y: 28, filter: "blur(6px)" },
-  show: {
-    opacity: 1,
-    y: 0,
-    filter: "blur(0px)",
-    transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] },
-  },
-};
+// ---------------------------------------------------------------------------
+// Reveal — fade + slide up via IntersectionObserver + CSS transitions
+// ---------------------------------------------------------------------------
 
 export function Reveal({
   children,
@@ -20,19 +14,44 @@ export function Reveal({
   className?: string;
   delay?: number;
 }) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    el.style.opacity = "0";
+    el.style.transform = "translateY(28px)";
+    el.style.filter = "blur(6px)";
+    el.style.transition = `opacity 0.9s ease, transform 0.9s ease, filter 0.9s ease`;
+    el.style.transitionDelay = `${delay}s`;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          el.style.opacity = "1";
+          el.style.transform = "translateY(0)";
+          el.style.filter = "blur(0px)";
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "-80px" },
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [delay]);
+
   return (
-    <motion.div
-      className={className}
-      variants={variants}
-      initial="hidden"
-      whileInView="show"
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ delay }}
-    >
+    <div ref={ref} className={className}>
       {children}
-    </motion.div>
+    </div>
   );
 }
+
+// ---------------------------------------------------------------------------
+// Constants
+// ---------------------------------------------------------------------------
 
 export const WHATSAPP_NUMBER = "918105139791";
 export const WHATSAPP_DISPLAY = "+91 81051 39791";

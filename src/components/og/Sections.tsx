@@ -2,14 +2,11 @@ import { ArrowRight, BadgeCheck } from "lucide-react";
 import { CtaButton } from "./Reveal";
 import { pickService } from "@/lib/service-select";
 
-import svcDetailing from "@/assets/svc-detailing.jpg";
 import svcInterior from "@/assets/svc-interior.jpg";
-import svcExterior from "@/assets/svc-exterior.jpg";
 import svcCorrection from "@/assets/svc-correction.jpg";
 import svcCeramic from "@/assets/svc-ceramic.jpg";
 import svcPpf from "@/assets/svc-ppf.jpg";
 import svcWash from "@/assets/svc-wash.jpg";
-import svcSpecial from "@/assets/svc-special.jpg";
 import storyImg from "@/assets/story-family.jpg";
 import { BeforeAfterSlider } from "./BeforeAfterSlider";
 import { Reveal, SectionHeading } from "./Reveal";
@@ -109,7 +106,7 @@ const services = [
   },
   {
     name: "Car Detailing",
-    img: svcDetailing,
+    img: svcInterior,
     alt: "A detailer wiping a glossy black car panel with a microfiber cloth",
     benefit: "A full reset, inside and out.",
     copy: "Every surface cleaned, corrected and protected in order. The car feels new when you get in.",
@@ -123,7 +120,7 @@ const services = [
   },
   {
     name: "Exterior Detailing",
-    img: svcExterior,
+    img: svcCorrection,
     alt: "Snow foam wash on a dark luxury car during exterior detailing",
     benefit: "Showroom look, back again.",
     copy: "Bonded dirt pulled out, gloss lifted, faded trim revived. The paint does the talking.",
@@ -144,7 +141,7 @@ const services = [
   },
   {
     name: "Special Care Packages",
-    img: svcSpecial,
+    img: svcPpf,
     alt: "Freshly detailed luxury car under studio spotlights at delivery",
     benefit: "Built around your plans.",
     copy: "New car prep, wedding and festival days, or a yearly upkeep plan — put together after we see the car.",
