@@ -3,7 +3,7 @@ import { LeadForm } from "./BookingForm";
 import { WhatsAppIcon } from "./WhatsAppIcon";
 import { useScrolledPastHero } from "./useScrolledPastHero";
 import beading from "@/assets/gallery-beading.jpg";
-import interior from "@/assets/gallery-interior.jpg";
+import interior from "@/assets/gallery-detail.jpg";
 import reveal from "@/assets/gallery-reveal.jpg";
 import detail from "@/assets/gallery-detail.jpg";
 import ppf from "@/assets/gallery-ppf.jpg";

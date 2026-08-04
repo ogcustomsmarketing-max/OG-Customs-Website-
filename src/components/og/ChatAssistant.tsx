@@ -1,10 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { MessageCircle, Send, X } from "lucide-react";
-import { useServerFn } from "@tanstack/react-start";
 import { WhatsAppIcon } from "./WhatsAppIcon";
 
-import logo from "@/assets/og-monogram.png";
-import { submitChatLead } from "@/lib/leads.functions";
+import logo from "@/assets/og-logo-mark.png";
 import { whatsappLink } from "./Reveal";
 import { useScrolledPastHero } from "./useScrolledPastHero";
 
@@ -75,7 +73,6 @@ export function ChatAssistant() {
   const [messages, setMessages] = useState<Msg[]>([{ from: "bot", text: STEPS[0].question }]);
   const scrollRef = useRef<HTMLDivElement>(null);
   const loggedRef = useRef(false);
-  const logChat = useServerFn(submitChatLead);
 
   const step = STEPS[index];
   const done = index >= STEPS.length;
@@ -98,22 +95,10 @@ export function ChatAssistant() {
   }, [messages, open]);
 
 
-  function logConversation(finalAnswers: Record<string, string>, finalMessages: Msg[]) {
+  function logConversation(_finalAnswers: Record<string, string>, _finalMessages: Msg[]) {
     if (loggedRef.current) return;
     loggedRef.current = true;
-    logChat({
-      data: {
-        name: finalAnswers.name ?? "",
-        phone: finalAnswers.phone ?? "",
-        car: finalAnswers.car ?? "",
-        service: finalAnswers.service ?? "",
-        condition: finalAnswers.condition ?? "",
-        transcript: finalMessages
-          .map((m) => `${m.from === "bot" ? "OG" : "Customer"}: ${m.text}`)
-          .join("\n")
-          .slice(0, 4000),
-      },
-    }).catch(() => undefined);
+    // Lead logging happens via WhatsApp — no server needed.
   }
 
   function answer(value: string) {
