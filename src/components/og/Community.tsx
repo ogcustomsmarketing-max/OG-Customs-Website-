@@ -3,11 +3,15 @@ import { LeadForm } from "./BookingForm";
 import { WhatsAppIcon } from "./WhatsAppIcon";
 import { useScrolledPastHero } from "./useScrolledPastHero";
 import beading from "@/assets/gallery-beading.jpg";
-import interior from "@/assets/gallery-detail.jpg";
+import interior from "@/assets/gallery-interior-detail.jpg";
 import reveal from "@/assets/gallery-reveal.jpg";
 import detail from "@/assets/gallery-detail.jpg";
 import ppf from "@/assets/gallery-ppf.jpg";
 import polish from "@/assets/gallery-polish.jpg";
+import bike from "@/assets/gallery-bike.jpg";
+import engine from "@/assets/gallery-engine.jpg";
+import headlight from "@/assets/gallery-headlight.jpg";
+import wheel from "@/assets/gallery-wheel.jpg";
 import logo from "@/assets/og-logo-mark.png";
 import {
   Reveal,
@@ -139,6 +143,10 @@ const gallery = [
   { src: reveal, alt: "White SUV delivery reveal under studio lights", label: "Delivery reveal", span: "lg:col-span-2", h: "h-64" },
   { src: ppf, alt: "Paint protection film being applied to a dark car panel", label: "PPF application", span: "lg:col-span-2", h: "h-64" },
   { src: polish, alt: "Machine polishing a car panel during paint correction", label: "Paint correction", span: "lg:col-span-2", h: "h-64" },
+  { src: bike, alt: "Detailed motorcycle finished with a glossy protective coating", label: "Bike detailing", span: "", h: "h-64" },
+  { src: engine, alt: "Cleaned and dressed engine bay after a full detail", label: "Engine bay detail", span: "", h: "h-64" },
+  { src: headlight, alt: "Restored clear headlight after correction and polish", label: "Headlight restoration", span: "", h: "h-64" },
+  { src: wheel, alt: "Ceramic coated alloy wheel with a deep, clean shine", label: "Wheel & alloy care", span: "", h: "h-64" },
 ];
 
 export function Gallery() {
