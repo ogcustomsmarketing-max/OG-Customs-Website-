@@ -1,7 +1,9 @@
 # OG Customs — Bangalore car & bike detailing landing page
 
-Built with TanStack Start (React 19 + Vite + Tailwind v4). Ships as a fully
-static site — there's no server or hosting bill to manage.
+Built as a plain client-side single-page app: React 19 + Vite 8 +
+[TanStack Router](https://tanstack.com/router) (routing only, no SSR/Start
+framework) + Tailwind v4. Ships as fully static HTML/CSS/JS — there's no
+server, no build-time SSR/prerender step, and no hosting bill to manage.
 
 Leads from the booking form and the chat assistant are logged to two Google
 Sheets by posting straight from the browser to a Google Apps Script Web App
@@ -19,8 +21,8 @@ bun run dev            # http://localhost:8080
 
 Push to `main` and `.github/workflows/deploy.yml` handles the rest:
 
-1. Builds with `NITRO_PRESET=github_pages`, which makes Nitro prerender
-   every route to plain static HTML/CSS/JS in `.output/public`.
+1. `bun run build` runs a plain `vite build` — no SSR, no server bundle,
+   just static HTML/CSS/JS in `dist/`.
 2. Uploads that folder as a Pages artifact and deploys it.
 
 One-time setup in the GitHub repo:
@@ -31,9 +33,12 @@ One-time setup in the GitHub repo:
   - `VITE_LEADS_SECRET` — the shared secret from the script
 
 Site ends up at `https://<org>.github.io/<repo>/` unless you attach a custom
-domain (Settings → Pages → Custom domain). If you do, update the two URLs in
-`public/sitemap.xml` and `public/robots.txt`, and the `og:url`/canonical tags
-in `src/routes/__root.tsx`.
+domain (Settings → Pages → Custom domain). If you do:
+
+- Update the two URLs in `public/sitemap.xml` and `public/robots.txt`, and
+  the `SITE`/canonical constant in `src/routes/index.tsx`.
+- Set `base: "/"` in `vite.config.ts` (it defaults to the repo-subpath
+  `/OG-Customs-Website-/` that plain `<org>.github.io/<repo>/` hosting needs).
 
 ### Google Sheets setup (one-time)
 
