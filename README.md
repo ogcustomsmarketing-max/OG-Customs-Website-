@@ -49,7 +49,7 @@ Sheet IDs live in `scripts/google-apps-script/lead-capture.gs`:
 ### Notes
 
 - Both the booking form and the chat assistant treat lead logging as
-  fire-and-forget (`src/lib/leads.client.ts`) — the customer is already sent
+  fire-and-forget (`src/lib/leads.ts`) — the customer is already sent
   to WhatsApp/email synchronously on submit, so a failed Sheets write never
   blocks or errors out their experience.
 - `VITE_LEADS_SECRET` is a basic bot filter, not real auth (it ships in the

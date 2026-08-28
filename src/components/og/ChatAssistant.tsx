@@ -3,7 +3,7 @@ import { MessageCircle, Send, X } from "lucide-react";
 import { WhatsAppIcon } from "./WhatsAppIcon";
 
 import logo from "@/assets/og-monogram.png";
-import { submitChatLead } from "@/lib/leads.client";
+import { submitChatLead } from "@/lib/leads";
 import { whatsappLink } from "./Reveal";
 import { useScrolledPastHero } from "./useScrolledPastHero";
 
