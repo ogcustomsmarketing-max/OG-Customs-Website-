@@ -1,14 +1,12 @@
 export const SERVICE_SELECT_EVENT = "og:select-service";
 
 export const SERVICES = [
+  "Paint Restoration",
+  "Paint Protection Film (PPF)",
   "Ceramic Coating",
-  "Paint Protection Film",
-  "Car Detailing",
-  "Interior Detailing",
-  "Exterior Detailing",
-  "Paint Correction",
+  "Sun Film",
+  "Other Services",
   "Wash & Maintenance Care",
-  "Special Care Packages",
   "Not sure — need your advice",
 ] as const;
 

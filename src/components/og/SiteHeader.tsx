@@ -1,7 +1,23 @@
 import { useEffect, useState } from "react";
-import { Menu, X, Instagram } from "lucide-react";
-import logo from "@/assets/og-logo-mark.png";
-import { CtaButton, INSTAGRAM_URL, INSTAGRAM_HANDLE, openExternal } from "./Reveal";
+import { Menu, X } from "lucide-react";
+import logo from "@/assets/og-customs-logo.png";
+import instagramIcon from "@/assets/social/instagram-norm.png";
+import youtubeIcon from "@/assets/social/youtube-norm.png";
+import facebookIcon from "@/assets/social/facebook-norm.png";
+import {
+  CtaButton,
+  INSTAGRAM_URL,
+  INSTAGRAM_HANDLE,
+  YOUTUBE_URL,
+  FACEBOOK_URL,
+  openExternal,
+} from "./Reveal";
+
+const socials = [
+  { name: "Instagram", url: INSTAGRAM_URL, icon: instagramIcon },
+  { name: "YouTube", url: YOUTUBE_URL, icon: youtubeIcon },
+  { name: "Facebook", url: FACEBOOK_URL, icon: facebookIcon },
+];
 
 const links = [
   { href: "#story", label: "Our Story" },
@@ -37,18 +53,14 @@ export function SiteHeader() {
         />
       ) : null}
       <div className="relative mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-5 py-3.5 sm:px-8 lg:grid-cols-[auto_1fr_auto]">
-        <a href="#top" className="flex min-w-0 items-center gap-2.5 sm:gap-3">
+        <a href="#top" className="flex min-w-0 items-center">
           <img
             src={logo}
             alt="OG Customs logo"
-            width={128}
-            height={93}
-            className="h-8 w-auto shrink-0 object-contain sm:h-9"
+            className="h-10 w-auto shrink-0 object-contain sm:h-12"
           />
-          <span className="min-w-0 truncate font-display text-[0.7rem] font-semibold tracking-[0.16em] uppercase sm:text-sm sm:tracking-[0.28em] [text-shadow:0_1px_10px_rgb(0_0_0_/_0.7)]">
-            OG Customs
-          </span>
         </a>
+
 
         <nav className="hidden justify-center gap-8 lg:flex" aria-label="Primary">
           {links.map((l) => (
@@ -64,20 +76,24 @@ export function SiteHeader() {
 
 
         <div className="flex items-center gap-2">
-          <a
-            href={INSTAGRAM_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={openExternal(INSTAGRAM_URL)}
-            aria-label="OG Customs on Instagram"
-            className="hidden h-11 w-11 place-items-center rounded-md border border-border bg-background/50 text-foreground/90 backdrop-blur-md transition-colors hover:text-gold sm:grid"
-          >
-            <Instagram className="h-6 w-6" />
-          </a>
-          <div className="hidden md:block">
+          {socials.map((s) => (
+            <a
+              key={s.name}
+              href={s.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={openExternal(s.url)}
+              aria-label={`OG Customs on ${s.name}`}
+              className="hidden h-9 w-9 place-items-center transition-transform hover:-translate-y-0.5 sm:grid"
+            >
+              <img src={s.icon} alt={`${s.name} logo`} className="h-7 w-7 object-contain" />
+            </a>
+          ))}
+
+          <div className="block">
             <CtaButton
               href="#contact"
-              className="relative overflow-hidden px-5 py-2.5 text-xs"
+              className="relative overflow-hidden px-3.5 py-2.5 text-[0.65rem] sm:px-5 sm:text-xs"
             >
               <span className="relative z-10">Get Free Inspection</span>
               <span
@@ -113,19 +129,25 @@ export function SiteHeader() {
                 {l.label}
               </a>
             ))}
-            <a
-              href={INSTAGRAM_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={(e) => {
-                setOpen(false);
-                openExternal(INSTAGRAM_URL)(e);
-              }}
-              className="flex items-center gap-2 py-2.5 text-base text-muted-foreground"
-            >
-              <Instagram className="h-4 w-4" />
-              {INSTAGRAM_HANDLE}
-            </a>
+            <div className="flex items-center gap-3 py-2.5">
+              {socials.map((s) => (
+                <a
+                  key={s.name}
+                  href={s.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => {
+                    setOpen(false);
+                    openExternal(s.url)(e);
+                  }}
+                  aria-label={`OG Customs on ${s.name}`}
+                  className="grid h-10 w-10 place-items-center"
+                >
+                  <img src={s.icon} alt={`${s.name} logo`} className="h-6 w-6 object-contain" />
+                </a>
+              ))}
+              <span className="text-sm text-muted-foreground">{INSTAGRAM_HANDLE}</span>
+            </div>
             <CtaButton href="#contact" className="mt-3 w-full">
               Get Free Inspection
             </CtaButton>

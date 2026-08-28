@@ -1,4 +1,7 @@
-import { Instagram, Mail, MapPin, Phone, Clock, ExternalLink } from "lucide-react";
+import { Mail, MapPin, Phone, Clock, ExternalLink } from "lucide-react";
+import instagramIcon from "@/assets/social/instagram-norm.png";
+import youtubeIcon from "@/assets/social/youtube-norm.png";
+import facebookIcon from "@/assets/social/facebook-norm.png";
 import {
   Reveal,
   SectionHeading,
@@ -7,6 +10,8 @@ import {
   WHATSAPP_URL,
   INSTAGRAM_URL,
   INSTAGRAM_HANDLE,
+  YOUTUBE_URL,
+  FACEBOOK_URL,
   openExternal,
 } from "./Reveal";
 
@@ -30,10 +35,10 @@ const hours = [
 
 export function ContactInfo() {
   return (
-    <section id="visit" className="relative py-14 sm:py-24">
+    <section id="visit" className="relative py-16 sm:py-24 md:py-28">
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
         <SectionHeading
-          eyebrow="Come see the studio"
+          eyebrow=""
           align="center"
           title={
             <>
@@ -42,7 +47,7 @@ export function ContactInfo() {
           }
         />
 
-        <div className="mt-10 grid gap-10 sm:mt-14 lg:grid-cols-2 lg:gap-16">
+        <div className="mt-10 grid gap-8 sm:mt-14 lg:grid-cols-2 lg:gap-12">
           <div className="space-y-9">
             <div>
               <h3 className="eyebrow">Get in touch</h3>
@@ -99,17 +104,28 @@ export function ContactInfo() {
 
             <div>
               <h3 className="eyebrow">Follow us</h3>
-              <a
-                href={INSTAGRAM_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={openExternal(INSTAGRAM_URL)}
-                className="mt-5 inline-flex items-center gap-3 text-sm text-muted-foreground transition-colors hover:text-gold"
-              >
-                <Instagram className="h-4 w-4 text-gold" />
-                OG Customs Bangalore — {INSTAGRAM_HANDLE}
-              </a>
+              <ul className="mt-5 space-y-3 text-sm">
+                {[
+                  { name: "Instagram", url: INSTAGRAM_URL, icon: instagramIcon, label: `OG Customs Bangalore — ${INSTAGRAM_HANDLE}` },
+                  { name: "YouTube", url: YOUTUBE_URL, icon: youtubeIcon, label: "OG Customs on YouTube" },
+                  { name: "Facebook", url: FACEBOOK_URL, icon: facebookIcon, label: "OG Customs on Facebook" },
+                ].map((s) => (
+                  <li key={s.name}>
+                    <a
+                      href={s.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={openExternal(s.url)}
+                      className="inline-flex items-center gap-3 text-muted-foreground transition-colors hover:text-gold"
+                    >
+                      <img src={s.icon} alt={`${s.name} logo`} className="h-5 w-5 object-contain" />
+                      {s.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
             </div>
+
           </div>
 
           <Reveal delay={0.1}>
