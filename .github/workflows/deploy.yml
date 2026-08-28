@@ -32,11 +32,15 @@ jobs:
 
       - name: Build
         run: bun run build
+        env:
+          NITRO_PRESET: github_pages
+          VITE_LEADS_ENDPOINT: ${{ secrets.VITE_LEADS_ENDPOINT }}
+          VITE_LEADS_SECRET: ${{ secrets.VITE_LEADS_SECRET }}
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: dist
+          path: ./.output/public
 
   deploy:
     needs: build

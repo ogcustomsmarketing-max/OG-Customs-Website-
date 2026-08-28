@@ -13,4 +13,4 @@ Allow: /
 User-agent: *
 Allow: /
 
-Sitemap: https://og-pride-creations.lovable.app/sitemap.xml
+Sitemap: https://ogcustomsmarketing-max.github.io/OG-Customs-Website-/sitemap.xml

@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { Mail } from "lucide-react";
-import { useServerFn } from "@tanstack/react-start";
 import { WhatsAppIcon } from "./WhatsAppIcon";
 
-import { submitFormLead } from "@/lib/leads.functions";
+import { submitFormLead } from "@/lib/leads.client";
 import { SERVICES, SERVICE_SELECT_EVENT } from "@/lib/service-select";
 import { EMAIL, whatsappLink } from "./Reveal";
 
@@ -21,7 +20,6 @@ export function LeadForm({ className = "" }: { className?: string }) {
   });
   const [error, setError] = useState("");
   const [sending, setSending] = useState(false);
-  const logLead = useServerFn(submitFormLead);
 
   useEffect(() => {
     const onPick = (e: Event) => {
@@ -76,15 +74,13 @@ export function LeadForm({ className = "" }: { className?: string }) {
 
     // Log the lead to the sheet in the background; never block the customer.
     setSending(true);
-    logLead({
-      data: {
-        name: form.name.trim(),
-        phone: form.phone.trim(),
-        car: form.car.trim(),
-        service: form.service,
-        message: form.message.trim(),
-        channel,
-      },
+    submitFormLead({
+      name: form.name.trim(),
+      phone: form.phone.trim(),
+      car: form.car.trim(),
+      service: form.service,
+      message: form.message.trim(),
+      channel,
     })
       .catch(() => undefined)
       .finally(() => setSending(false));

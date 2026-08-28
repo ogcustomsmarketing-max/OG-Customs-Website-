@@ -1,50 +1,57 @@
 # OG Customs — Bangalore car & bike detailing landing page
 
-Built with TanStack Start (React 19 + Vite 7 + Tailwind v4). Leads from the
-booking form and the chat assistant are appended to two Google Sheets from the
-server, using a Google service account.
+Built with TanStack Start (React 19 + Vite + Tailwind v4). Ships as a fully
+static site — there's no server or hosting bill to manage.
+
+Leads from the booking form and the chat assistant are logged to two Google
+Sheets by posting straight from the browser to a Google Apps Script Web App
+(see `scripts/google-apps-script/`). No backend, no service-account secrets.
 
 ## Local development
 
 ```bash
-npm install
-cp .env.example .env   # fill in the service-account values
-npm run dev            # http://localhost:8080
+bun install
+cp .env.example .env   # fill in the Apps Script URL + shared secret
+bun run dev            # http://localhost:8080
 ```
 
-## Deploying to Netlify
+## Deploying to GitHub Pages
 
-1. Push this repo to GitHub.
-2. In Netlify: **Add new site → Import an existing project → GitHub** and pick
-   the repo.
-3. Netlify reads `netlify.toml`, so leave the build settings as detected:
-   - Build command: `npm run build`
-   - Publish directory: `dist`
-   - The server runs as a Netlify Function (Nitro `netlify` preset, set via the
-     `NITRO_PRESET` env var in `netlify.toml`).
-4. Add the environment variables under **Site configuration → Environment
-   variables** (scope: all deploy contexts):
-   - `GOOGLE_SERVICE_ACCOUNT_EMAIL`
-   - `GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY` (full PEM, `\n` escapes are handled)
-5. Deploy. Submit the form once and confirm a row lands in the sheet.
+Push to `main` and `.github/workflows/deploy.yml` handles the rest:
+
+1. Builds with `NITRO_PRESET=github_pages`, which makes Nitro prerender
+   every route to plain static HTML/CSS/JS in `.output/public`.
+2. Uploads that folder as a Pages artifact and deploys it.
+
+One-time setup in the GitHub repo:
+
+- **Settings → Pages → Build and deployment → Source: GitHub Actions.**
+- **Settings → Secrets and variables → Actions**, add:
+  - `VITE_LEADS_ENDPOINT` — the Apps Script Web App URL
+  - `VITE_LEADS_SECRET` — the shared secret from the script
+
+Site ends up at `https://<org>.github.io/<repo>/` unless you attach a custom
+domain (Settings → Pages → Custom domain). If you do, update the two URLs in
+`public/sitemap.xml` and `public/robots.txt`, and the `og:url`/canonical tags
+in `src/routes/__root.tsx`.
 
 ### Google Sheets setup (one-time)
 
-- Google Cloud Console → enable the **Google Sheets API** for the project that
-  owns the service account.
-- Share both spreadsheets with the service-account email as **Editor**:
-  - Submission form: `1bQKmT2twrm9mybFHR_GvlyuQJzJ0gNlSdvQlZQZiwIs`
-  - Chat assistant: `1dh7FIlrLaOJr2b-rlTfNRCFRAUs9FqJRfTJXne1zQpg`
+See `scripts/google-apps-script/README.md` for the full deploy steps. Short
+version: paste `lead-capture.gs` into Extensions → Apps Script on either
+sheet, deploy as a Web App, copy the URL into `VITE_LEADS_ENDPOINT`.
 
-Sheet IDs live in `src/lib/leads.server.ts`.
+Sheet IDs live in `scripts/google-apps-script/lead-capture.gs`:
+
+- Submission form: `1bQKmT2twrm9mybFHR_GvlyuQJzJ0gNlSdvQlZQZiwIs`
+- Chat assistant: `1dh7FIlrLaOJr2b-rlTfNRCFRAUs9FqJRfTJXne1zQpg`
 
 ### Notes
 
-- No Lovable-only services are required at runtime. If the optional
-  `LOVABLE_API_KEY` / `GOOGLE_SHEETS_API_KEY` variables are absent, the code
-  simply uses the service account (the connector path is skipped).
-- If a write ever fails, the lead row is logged in the Netlify function logs so
-  nothing is lost.
-- Custom domain: **Netlify → Domain management → Add a domain**, then update
-  `BASE_URL` in `src/routes/sitemap[.]xml.ts` and the canonical/OG URLs in
-  `src/routes/index.tsx`.
+- Both the booking form and the chat assistant treat lead logging as
+  fire-and-forget (`src/lib/leads.client.ts`) — the customer is already sent
+  to WhatsApp/email synchronously on submit, so a failed Sheets write never
+  blocks or errors out their experience.
+- `VITE_LEADS_SECRET` is a basic bot filter, not real auth (it ships in the
+  client bundle by nature of being a static site). It just stops naive
+  scanners from hammering the endpoint.
