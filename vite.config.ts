@@ -4,10 +4,10 @@ import tailwindcss from "@tailwindcss/vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 import { tanstackRouter } from "@tanstack/router-plugin/vite";
 
-// GitHub Pages serves this repo from https://<org>.github.io/OG-Customs-Website-/
-// — a subpath, not root. Override via VITE_BASE_PATH (e.g. "/" for a custom
-// domain) if that ever changes.
-const base = process.env.VITE_BASE_PATH ?? "/OG-Customs-Website-/";
+// Custom domain (ogcustoms.in) serves this from the root. Override via
+// VITE_BASE_PATH (e.g. "/OG-Customs-Website-/") only if you ever go back to
+// the plain <org>.github.io/<repo>/ project-pages URL instead.
+const base = process.env.VITE_BASE_PATH ?? "/";
 
 export default defineConfig({
   base,

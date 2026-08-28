@@ -15,7 +15,7 @@ import {
   WhatsAppFloat,
 } from "@/components/og/Community";
 
-const SITE = "https://og-pride-creations.lovable.app";
+const SITE = "https://ogcustoms.in";
 const title = "Car Detailing & Ceramic Coating in Bangalore | OG Customs";
 const description =
   "Engineer-led vehicle detailing studio in Domlur, Bangalore. Ceramic coating, paint correction, PPF and interior detailing — free inspection first, then one clear price. Message us on WhatsApp.";
