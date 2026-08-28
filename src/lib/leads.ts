@@ -1,12 +1,18 @@
 /**
- * Client-side lead capture. Posts straight to a Google Apps Script Web App
- * (see scripts/google-apps-script/) that appends a row to the relevant
- * Sheet — no server of our own involved.
+ * Lead capture. Posts straight to a Google Apps Script Web App (see
+ * scripts/google-apps-script/) that appends a row to the relevant Sheet —
+ * no server of our own involved.
  *
  * Fire-and-forget by design: the customer has already been handed off to
  * WhatsApp/email by the time this is called, so a failed log here should
  * never block or error out the UI. Callers should still `.catch()` this,
  * same as before, in case a future caller wants to know.
+ *
+ * NOTE: deliberately NOT named `leads.client.ts` — TanStack Start treats
+ * `*.client.*` filenames as browser-only and refuses to bundle them into the
+ * server build. These functions are only ever invoked from onClick/onSubmit
+ * handlers (never during render/prerender), and `fetch` is safe in both
+ * environments, so this plain name is correct.
  */
 
 const LEADS_ENDPOINT = import.meta.env.VITE_LEADS_ENDPOINT;

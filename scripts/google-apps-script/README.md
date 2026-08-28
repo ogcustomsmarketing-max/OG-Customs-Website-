@@ -43,4 +43,4 @@ URL and you'd need to update `VITE_LEADS_ENDPOINT` again.
   scanners from finding the endpoint and hammering it blind.
 - If a write fails, the script returns `{ ok: false, error: "..." }`, but the
   site treats every lead submission as fire-and-forget (the customer's
-  already been sent to WhatsApp/email regardless — see `leads.client.ts`).
+  already been sent to WhatsApp/email regardless — see `leads.ts`).

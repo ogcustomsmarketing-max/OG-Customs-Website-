@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Mail } from "lucide-react";
 import { WhatsAppIcon } from "./WhatsAppIcon";
 
-import { submitFormLead } from "@/lib/leads.client";
+import { submitFormLead } from "@/lib/leads";
 import { SERVICES, SERVICE_SELECT_EVENT } from "@/lib/service-select";
 import { EMAIL, whatsappLink } from "./Reveal";
 
