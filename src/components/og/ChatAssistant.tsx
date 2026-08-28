@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { MessageCircle, Send, X } from "lucide-react";
+import { useServerFn } from "@tanstack/react-start";
 import { WhatsAppIcon } from "./WhatsAppIcon";
 
-import logo from "@/assets/og-logo-mark.png";
+import logo from "@/assets/og-monogram.png";
+import { submitChatLead } from "@/lib/leads.functions";
 import { whatsappLink } from "./Reveal";
 import { useScrolledPastHero } from "./useScrolledPastHero";
 
@@ -28,7 +30,7 @@ const STEPS: Step[] = [
   },
   {
     id: "car",
-    question: "Nice. Which car are we working on? (make & model)",
+    question: "Nice. Which vehicle are we working on? (make & model)",
     placeholder: "e.g. Hyundai Creta",
   },
   {
@@ -58,7 +60,7 @@ const INFO: Record<string, string> = {
   "Interior Detailing":
     "Seats, dash, vents and roof lining deep-cleaned and treated. No dust, no smell, no sticky trim.",
   "Not sure yet":
-    "That's fine — most owners start with an inspection. We look at the car and tell you only what it actually needs.",
+    "That's fine — most owners start with an inspection. We look at the vehicle and tell you only what it actually needs.",
 };
 
 type Msg = { from: "bot" | "user"; text: string };
@@ -73,6 +75,7 @@ export function ChatAssistant() {
   const [messages, setMessages] = useState<Msg[]>([{ from: "bot", text: STEPS[0].question }]);
   const scrollRef = useRef<HTMLDivElement>(null);
   const loggedRef = useRef(false);
+  const logChat = useServerFn(submitChatLead);
 
   const step = STEPS[index];
   const done = index >= STEPS.length;
@@ -95,10 +98,22 @@ export function ChatAssistant() {
   }, [messages, open]);
 
 
-  function logConversation(_finalAnswers: Record<string, string>, _finalMessages: Msg[]) {
+  function logConversation(finalAnswers: Record<string, string>, finalMessages: Msg[]) {
     if (loggedRef.current) return;
     loggedRef.current = true;
-    // Lead logging happens via WhatsApp — no server needed.
+    logChat({
+      data: {
+        name: finalAnswers.name ?? "",
+        phone: finalAnswers.phone ?? "",
+        car: finalAnswers.car ?? "",
+        service: finalAnswers.service ?? "",
+        condition: finalAnswers.condition ?? "",
+        transcript: finalMessages
+          .map((m) => `${m.from === "bot" ? "OG" : "Customer"}: ${m.text}`)
+          .join("\n")
+          .slice(0, 4000),
+      },
+    }).catch(() => undefined);
   }
 
   function answer(value: string) {
@@ -133,7 +148,7 @@ export function ChatAssistant() {
       "Hi OG Customs, I used the chat assistant.",
       `Name: ${answers.name ?? ""}`,
       `Phone: ${answers.phone ?? ""}`,
-      `Car: ${answers.car ?? ""}`,
+      `Vehicle: ${answers.car ?? ""}`,
       `Service: ${answers.service ?? ""}`,
       `Paint condition: ${answers.condition ?? ""}`,
     ].join("\n"),

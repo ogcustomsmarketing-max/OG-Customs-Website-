@@ -1,9 +1,15 @@
-import { useEffect, useRef, type ReactNode } from "react";
-import type { MouseEvent } from "react";
+import { motion, type Variants } from "motion/react";
+import type { MouseEvent, ReactNode } from "react";
 
-// ---------------------------------------------------------------------------
-// Reveal — fade + slide up via IntersectionObserver + CSS transitions
-// ---------------------------------------------------------------------------
+const variants: Variants = {
+  hidden: { opacity: 0, y: 28, filter: "blur(6px)" },
+  show: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] },
+  },
+};
 
 export function Reveal({
   children,
@@ -14,50 +20,27 @@ export function Reveal({
   className?: string;
   delay?: number;
 }) {
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-
-    el.style.opacity = "0";
-    el.style.transform = "translateY(28px)";
-    el.style.filter = "blur(6px)";
-    el.style.transition = `opacity 0.9s ease, transform 0.9s ease, filter 0.9s ease`;
-    el.style.transitionDelay = `${delay}s`;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          el.style.opacity = "1";
-          el.style.transform = "translateY(0)";
-          el.style.filter = "blur(0px)";
-          observer.disconnect();
-        }
-      },
-      { rootMargin: "-80px" },
-    );
-
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [delay]);
-
   return (
-    <div ref={ref} className={className}>
+    <motion.div
+      className={className}
+      variants={variants}
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ delay }}
+    >
       {children}
-    </div>
+    </motion.div>
   );
 }
-
-// ---------------------------------------------------------------------------
-// Constants
-// ---------------------------------------------------------------------------
 
 export const WHATSAPP_NUMBER = "918105139791";
 export const WHATSAPP_DISPLAY = "+91 81051 39791";
 export const EMAIL = "ogcustomsmarketing@gmail.com";
 export const INSTAGRAM_URL = "https://www.instagram.com/og_customs.blr/";
 export const INSTAGRAM_HANDLE = "@og_customs.blr";
+export const YOUTUBE_URL = "https://www.youtube.com/@OG_Customs-blr";
+export const FACEBOOK_URL = "https://www.facebook.com/ogcustoms.blr";
 
 export const WHATSAPP_URL =
   `https://wa.me/${WHATSAPP_NUMBER}?text=` +
@@ -128,7 +111,7 @@ export function SectionHeading({
   return (
     <div className={align === "center" ? "mx-auto max-w-2xl text-center" : "max-w-2xl"}>
       <Reveal>
-        <p className="eyebrow">{eyebrow}</p>
+        {eyebrow ? <p className="eyebrow">{eyebrow}</p> : null}
       </Reveal>
       <Reveal delay={0.08}>
         <h2 className="mt-5 text-3xl leading-[1.1] font-semibold text-balance sm:text-4xl md:text-5xl">

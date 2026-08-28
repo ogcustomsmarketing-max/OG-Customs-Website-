@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { Mail } from "lucide-react";
+import { useServerFn } from "@tanstack/react-start";
 import { WhatsAppIcon } from "./WhatsAppIcon";
+
+import { submitFormLead } from "@/lib/leads.functions";
 import { SERVICES, SERVICE_SELECT_EVENT } from "@/lib/service-select";
 import { EMAIL, whatsappLink } from "./Reveal";
 
@@ -17,6 +20,8 @@ export function LeadForm({ className = "" }: { className?: string }) {
     message: "",
   });
   const [error, setError] = useState("");
+  const [sending, setSending] = useState(false);
+  const logLead = useServerFn(submitFormLead);
 
   useEffect(() => {
     const onPick = (e: Event) => {
@@ -38,7 +43,7 @@ export function LeadForm({ className = "" }: { className?: string }) {
       "Hi OG Customs, I'd like to book an inspection.",
       `Name: ${form.name.trim()}`,
       `Phone: ${form.phone.trim()}`,
-      `Car: ${form.car.trim()}`,
+      `Vehicle: ${form.car.trim()}`,
       `Service: ${form.service}`,
       form.message.trim() ? `Notes: ${form.message.trim()}` : "",
     ]
@@ -49,7 +54,7 @@ export function LeadForm({ className = "" }: { className?: string }) {
   function validate() {
     if (form.name.trim().length < 2) return "Please enter your name.";
     if (!/^[\d+\s-]{8,15}$/.test(form.phone.trim())) return "Please enter a valid phone number.";
-    if (form.car.trim().length < 2) return "Please tell us your car make and model.";
+    if (form.car.trim().length < 2) return "Please tell us your vehicle make and model.";
     if (form.message.length > 500) return "Please keep notes under 500 characters.";
     return "";
   }
@@ -68,6 +73,21 @@ export function LeadForm({ className = "" }: { className?: string }) {
         `Inspection request — ${form.name.trim()}`,
       )}&body=${encodeURIComponent(body)}`;
     }
+
+    // Log the lead to the sheet in the background; never block the customer.
+    setSending(true);
+    logLead({
+      data: {
+        name: form.name.trim(),
+        phone: form.phone.trim(),
+        car: form.car.trim(),
+        service: form.service,
+        message: form.message.trim(),
+        channel,
+      },
+    })
+      .catch(() => undefined)
+      .finally(() => setSending(false));
   }
 
   return (
@@ -97,7 +117,7 @@ export function LeadForm({ className = "" }: { className?: string }) {
       </div>
       <input
         className={`${inputClass} mt-4`}
-        placeholder="Car make & model (e.g. Hyundai Creta)"
+        placeholder="Vehicle make & model (e.g. Hyundai Creta)"
         maxLength={80}
         value={form.car}
         onChange={(e) => set("car")(e.target.value)}
@@ -115,7 +135,7 @@ export function LeadForm({ className = "" }: { className?: string }) {
       </select>
       <textarea
         className={`${inputClass} mt-4 min-h-24 resize-y`}
-        placeholder="Anything bothering you about the car? (optional)"
+        placeholder="Anything bothering you about the vehicle? (optional)"
         maxLength={500}
         value={form.message}
         onChange={(e) => set("message")(e.target.value)}
@@ -124,7 +144,8 @@ export function LeadForm({ className = "" }: { className?: string }) {
       <div className="mt-6 flex flex-col gap-3 sm:flex-row">
         <button
           type="submit"
-          className="group inline-flex flex-1 items-center justify-center gap-2 rounded-md bg-whatsapp px-6 py-3.5 text-sm font-semibold text-whatsapp-foreground transition-all duration-300 hover:brightness-110"
+          disabled={sending}
+          className="group inline-flex flex-1 items-center justify-center gap-2 rounded-md bg-whatsapp px-6 py-3.5 text-sm font-semibold text-whatsapp-foreground transition-all duration-300 hover:brightness-110 disabled:opacity-70"
         >
           <WhatsAppIcon className="h-4 w-4" />
           Send on WhatsApp

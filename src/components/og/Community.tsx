@@ -1,17 +1,26 @@
-import { Star, Instagram } from "lucide-react";
+import { useState } from "react";
+import { Star, ChevronDown } from "lucide-react";
 import { LeadForm } from "./BookingForm";
 import { WhatsAppIcon } from "./WhatsAppIcon";
 import { useScrolledPastHero } from "./useScrolledPastHero";
-import beading from "@/assets/gallery-beading.jpg";
-import interior from "@/assets/gallery-interior-detail.jpg";
-import reveal from "@/assets/gallery-reveal.jpg";
-import detail from "@/assets/gallery-detail.jpg";
-import ppf from "@/assets/gallery-ppf.jpg";
-import polish from "@/assets/gallery-polish.jpg";
-import bike from "@/assets/gallery-bike.jpg";
-import engine from "@/assets/gallery-engine.jpg";
-import headlight from "@/assets/gallery-headlight.jpg";
-import wheel from "@/assets/gallery-wheel.jpg";
+import gal730i from "@/assets/gal-730i.jpg";
+import galPolo from "@/assets/gal-polo_gt.jpg";
+
+import galSantro from "@/assets/gal-Hyundai_Santro.jpg";
+import galAClass from "@/assets/gal-Mercedes_A-Class.jpg";
+import galHectorBlack from "@/assets/gal-MG_Hector_Black.jpg";
+import galHimalayan from "@/assets/gal-Royal_Enfield_Himalayan.jpg";
+import galReTank from "@/assets/gal-Royal_Enfield_Tank.jpg";
+import galSlaviaRed from "@/assets/gal-Skoda_Slavia_Red.jpg";
+import galSlavia from "@/assets/gal-Skoda_Slavia.jpg";
+import galGlanza from "@/assets/gal-Toyota_Glanza.jpg";
+import galVirtus from "@/assets/gal-VW_Virtus.jpg";
+import vidCarWash from "@/assets/gal-Car_wash_video.mp4";
+import vidKtm from "@/assets/gal-KTM_Duke_Video.mp4";
+import vidHectorRed from "@/assets/gal-MG_Hector_Red.mp4";
+import vidPpf from "@/assets/gal-PPF_Application_video.mp4";
+import vidThunderbird from "@/assets/gal-Royal_Enfield_Thunderbird.mp4";
+
 import logo from "@/assets/og-logo-mark.png";
 import {
   Reveal,
@@ -19,9 +28,6 @@ import {
   WHATSAPP_URL,
   WHATSAPP_DISPLAY,
   EMAIL,
-  INSTAGRAM_URL,
-  INSTAGRAM_HANDLE,
-  openExternal,
 } from "./Reveal";
 
 const testimonials = [
@@ -99,7 +105,7 @@ function TestimonialCard({ t }: { t: (typeof testimonials)[number] }) {
 
 export function Testimonials() {
   return (
-    <section id="testimonials" className="relative py-14 sm:py-24">
+    <section id="testimonials" className="relative py-16 sm:py-24 md:py-28">
       <div className="mx-auto flex max-w-7xl flex-col gap-6 px-5 sm:px-8 lg:flex-row lg:items-end lg:justify-between lg:gap-12">
         <SectionHeading
           eyebrow="Customer Stories"
@@ -136,22 +142,36 @@ export function Testimonials() {
 }
 
 
-const gallery = [
-  { src: beading, alt: "Water beading on a ceramic coated black car panel", label: "Ceramic coating · water beading", span: "lg:col-span-2 lg:row-span-2", h: "h-72 lg:h-full" },
-  { src: interior, alt: "Restored leather car interior after deep interior detailing", label: "Interior restoration", span: "", h: "h-64" },
-  { src: detail, alt: "Mirror gloss headlight and paintwork close-up after paint correction", label: "Gloss close-up", span: "", h: "h-64" },
-  { src: reveal, alt: "White SUV delivery reveal under studio lights", label: "Delivery reveal", span: "lg:col-span-2", h: "h-64" },
-  { src: ppf, alt: "Paint protection film being applied to a dark car panel", label: "PPF application", span: "lg:col-span-2", h: "h-64" },
-  { src: polish, alt: "Machine polishing a car panel during paint correction", label: "Paint correction", span: "lg:col-span-2", h: "h-64" },
-  { src: bike, alt: "Detailed motorcycle finished with a glossy protective coating", label: "Bike detailing", span: "", h: "h-64" },
-  { src: engine, alt: "Cleaned and dressed engine bay after a full detail", label: "Engine bay detail", span: "", h: "h-64" },
-  { src: headlight, alt: "Restored clear headlight after correction and polish", label: "Headlight restoration", span: "", h: "h-64" },
-  { src: wheel, alt: "Ceramic coated alloy wheel with a deep, clean shine", label: "Wheel & alloy care", span: "", h: "h-64" },
+type GalleryItem = { src: string; alt: string; type?: "image" | "video" };
+
+const gallery: GalleryItem[] = [
+  { src: galAClass, alt: "Black Mercedes A-Class bonnet with mirror-gloss finish after paint correction" },
+  { src: vidPpf, type: "video", alt: "Paint protection film being squeegeed onto a panel" },
+  { src: galSlaviaRed, alt: "Red Skoda Slavia with deep gloss after ceramic coating" },
+  { src: vidKtm, type: "video", alt: "KTM Duke detailed and gleaming in the studio" },
+  { src: gal730i, alt: "Silver BMW 730i bonnet after paint correction" },
+  { src: galHimalayan, alt: "Royal Enfield Himalayan tank polished to a mirror finish" },
+  { src: vidCarWash, type: "video", alt: "Vehicle being foam washed at the OG Customs studio" },
 ];
 
+const galleryMore: GalleryItem[] = [
+  { src: galVirtus, alt: "Black Volkswagen Virtus bonnet reflecting studio light lines" },
+  { src: vidHectorRed, type: "video", alt: "Red MG Hector after a full detail" },
+  { src: galSantro, alt: "Red Hyundai Santro bonnet restored to a glossy finish" },
+  { src: galPolo, alt: "Volkswagen Polo GT bonnet with deep reflections" },
+  { src: galHectorBlack, alt: "Black MG Hector detailed and gleaming in daylight" },
+  { src: galReTank, alt: "Royal Enfield tank showing half-polished paint correction" },
+  { src: vidThunderbird, type: "video", alt: "Royal Enfield Thunderbird detailed at the studio" },
+  { src: galSlavia, alt: "Blue Skoda Slavia detailed with a deep gloss finish" },
+  { src: galGlanza, alt: "Matte-wrapped Toyota Glanza after detailing" },
+];
+
+
 export function Gallery() {
+  const [expanded, setExpanded] = useState(false);
+
   return (
-    <section id="gallery" className="relative py-16 sm:py-24 md:py-32">
+    <section id="gallery" className="relative py-16 sm:py-24 md:py-28">
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
         <SectionHeading
           eyebrow="Transformations"
@@ -160,28 +180,54 @@ export function Gallery() {
               Our work, <span className="text-gold-gradient">up close</span>
             </>
           }
-          intro="Real cars from our Domlur studio — corrected paint, coated panels, cleaned cabins, and the handover owners keep coming back for."
+          intro="Real vehicles from our studio: corrected paint, coated panels, cleaned-up cabins, and the handover moment owners keep coming back for."
         />
-        <div className="mt-10 grid auto-rows-[minmax(0,1fr)] gap-4 sm:mt-14 sm:grid-cols-2 lg:grid-cols-4">
-          {gallery.map((g, i) => (
-            <Reveal key={g.label} delay={(i % 4) * 0.06} className={g.span}>
-              <figure className="group relative h-full overflow-hidden rounded-xl border border-border">
-                <img
-                  src={g.src}
-                  alt={g.alt}
-                  loading="lazy"
-                  className={`w-full ${g.h} object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.07]`}
-                />
+        <div className="mt-10 columns-2 gap-3 sm:mt-14 sm:columns-3 sm:gap-4 lg:columns-4 lg:gap-5">
+          {(expanded ? [...gallery, ...galleryMore] : gallery).map((g, i) => (
+            <Reveal key={g.src + i} delay={(i % 4) * 0.06} className="mb-3 break-inside-avoid sm:mb-4 lg:mb-5">
+              <figure className="group relative overflow-hidden rounded-xl border border-border">
+                {g.type === "video" ? (
+                  <video
+                    src={g.src}
+                    aria-label={g.alt}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    preload="metadata"
+                    className="aspect-[3/4] w-full bg-charcoal/60 object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.07]"
+
+                  />
+                ) : (
+                  <img
+                    src={g.src}
+                    alt={g.alt}
+                    loading="lazy"
+                    className="w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.07]"
+                  />
+                )}
+
                 <div
-                  className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/10 to-transparent opacity-80 transition-opacity duration-500 group-hover:opacity-95"
+                  className="absolute inset-0 bg-gradient-to-t from-background/85 via-transparent to-transparent opacity-70 transition-opacity duration-500 group-hover:opacity-90"
                   aria-hidden
                 />
-                <figcaption className="absolute bottom-4 left-4 text-xs tracking-[0.2em] text-gold-soft uppercase">
-                  {g.label}
-                </figcaption>
               </figure>
             </Reveal>
           ))}
+        </div>
+
+
+        <div className="mt-8 flex justify-center">
+          <button
+            type="button"
+            onClick={() => setExpanded((v) => !v)}
+            className="inline-flex items-center gap-2 rounded-full border border-gold/35 bg-charcoal/60 px-6 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-gold transition-colors hover:border-gold/60 hover:text-gold-soft"
+          >
+            {expanded ? "View less" : "View more"}
+            <ChevronDown
+              className={`h-4 w-4 transition-transform duration-300 ${expanded ? "rotate-180" : ""}`}
+            />
+          </button>
         </div>
       </div>
     </section>
@@ -213,19 +259,24 @@ export function FinalCta() {
           </Reveal>
           <Reveal delay={0.08}>
             <h2 className="mt-7 text-3xl leading-[1.1] font-semibold text-balance sm:text-4xl md:text-5xl">
-              A quick clean isn't care.{" "}
-              <span className="text-gold-gradient">Let's do this properly.</span>
+              Not sure what your vehicle needs?{" "}
+              <span className="text-gold-gradient">Let's find out together.</span>
             </h2>
           </Reveal>
           <Reveal delay={0.14}>
             <p className="mt-6 max-w-xl leading-relaxed text-muted-foreground">
-              Tell us your car and what's bothering you about it. We'll take a look, say straight
-              what it needs, and give you one clear price. Nothing pushed, no surprises.
+              Send us the make and model, and tell us what you're hoping for: a deeper clean, better
+              protection, or just some advice on where to start. The team will take a look, walk you
+              through your options, and put together a package tailored to exactly what your vehicle
+              needs.
             </p>
           </Reveal>
         </div>
 
         <Reveal delay={0.1}>
+          <p className="mb-3 text-sm font-medium tracking-[0.02em] text-gold-soft">
+            Fill in details for free inspection.
+          </p>
           <LeadForm />
         </Reveal>
       </div>
@@ -247,7 +298,7 @@ export function SiteFooter() {
             className="h-9 w-9 shrink-0 object-contain"
           />
           <p className="min-w-0 text-sm text-muted-foreground">
-            OG Customs — car detailing, ceramic coating and PPF in Domlur, Bangalore. Since 2021.
+            OG Customs: vehicle detailing, ceramic coating and PPF in Bangalore. Since 2021.
           </p>
         </div>
         <div className="text-xs text-muted-foreground/80 md:text-right">
@@ -258,18 +309,8 @@ export function SiteFooter() {
             <a href={WHATSAPP_URL} target="_blank" rel="noreferrer" className="transition-colors hover:text-gold">
               {WHATSAPP_DISPLAY}
             </a>
-            <a
-              href={INSTAGRAM_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={openExternal(INSTAGRAM_URL)}
-              aria-label="OG Customs on Instagram"
-              className="inline-flex items-center gap-1 transition-colors hover:text-gold"
-            >
-              <Instagram className="h-3.5 w-3.5" />
-              {INSTAGRAM_HANDLE}
-            </a>
           </p>
+
           <p className="mt-2 text-muted-foreground/70">
             © {new Date().getFullYear()} OG Customs. Once OG, always OG.
           </p>
